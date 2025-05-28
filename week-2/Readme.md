@@ -32,6 +32,21 @@ This week’s notebooks introduce Markov Decision Processes (MDPs), state-value 
   - Using `env.unwrapped.P` to inspect transition probabilities  
   - Visualizing environments and extracting transition details
 
+- **Policy Iteration and Value Iteration:**  
+  - **Policy Iteration:** Alternates between policy evaluation (updating state values for a fixed policy) and policy improvement (making the policy greedy with respect to the updated values) until convergence.
+  - **Value Iteration:** Iteratively updates state values by taking the maximum expected return over all actions, leading directly to the optimal value function and policy.
+  - Both methods are demonstrated on discrete environments like FrozenLake and CliffWalking.
+  - Example pseudocode for value iteration:
+    ```python
+    for i in range(max_iterations):
+        for state in range(num_states):
+            V[state] = max(
+                sum(p * (r + gamma * V[next_s])
+                    for p, next_s, r, done in env.unwrapped.P[state][action])
+                for action in range(num_actions)
+            )
+    ```
+
 ## Key Code Snippets
 
 **Policy Evaluation (State-Value Update):**
@@ -40,29 +55,3 @@ for state in range(num_states):
     V[state] = sum(policy[state][a] * sum(p * (r + gamma * V[next_s])
         for p, next_s, r, done in env.unwrapped.P[state][a])
         for a in range(num_actions))
-```
-
-**Policy Improvement (Greedy w.r.t Q):**
-```python
-for state in range(num_states):
-    max_action = max(range(num_actions), key=lambda action: Q[(state, action)])
-    improved_policy[state] = max_action
-```
-
-**Q-value Computation:**
-```python
-def compute_q_value(state, action):
-    return sum(p * (r + gamma * V[next_s])
-        for p, next_s, r, done in env.unwrapped.P[state][action])
-```
-
-## Notes
-
-- The notebooks explain how to interpret the transition dictionary in Gymnasium environments.
-- Examples use both FrozenLake and CliffWalking to illustrate MDP, value function, and policy improvement concepts.
-- Visualization helps understand the environment’s state space.
-- Value iteration and policy iteration are demonstrated with code.
-
----
-
-More content and examples will be added as the course progresses.
